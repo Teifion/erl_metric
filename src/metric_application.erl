@@ -1,21 +1,12 @@
--module(metric_app).
+-module(metric_application).
 -behaviour(application).
+-import (metric_sup, [start_link/0]).
 
--export([report/2, average/1]).
+-export([start/2]).
+-export([stop/1]).
 
 start(_Type, _Args) ->
-  pass.
+  metric_sup:start_link().
 
--spec report(MetricName :: binary(), MetricValue :: float())
-report(MetricName, MetricValue) ->
-  % get the PID of the metric_server we want, if it doesn't exist it's created
-  % Send said metric server the value
-  MetricPid = name_server.get(MetricName).
-  MetricPid.report(MetricValue).
-
--spec average(MetricName :: binary()) -> float()
-average(MetricName) ->
-  MetricPid = name_server.get(MetricName).
-  MetricPid.report(MetricValue).
-  % get the PID of the metric_server we want, if it doesn't exist we fail
-  % It generates the return value we send back from here
+stop(_) ->
+  ok.

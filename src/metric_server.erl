@@ -1,33 +1,40 @@
--module(name_server).
+-module(metric_server).
 -behaviour(gen_server).
 
-% We store the name of the metric against the process PID in ETS
+-export ([average/1, report/2, report/3]).
 
 % Store stuff for 60 seconds as per the requirements
 -define(SCAN_PERIOD, 60 * 1000).
 
-init([]) -> {ok, []}.
+init([]) ->
+  {ok, []}.
+
+start_link() ->
+  gen_server:start_link(?MODULE, [], []).
 
 report (Pid, Value) ->
-  report(Pid, Value, system_time())
+  report(Pid, Value, os:system_time()).
 
 report (Pid, Value, Timestamp) ->
   gen_server:cast(Pid, {report, {Value, Timestamp}}).
 
-average () ->
+average (Pid) ->
   gen_server:call(Pid, {average, nil}).
 
 
 % Callbacks
-handle_call ({average, _}, State) ->
+handle_call ({average, _}, _, State) ->
   % LowerBound defaults to 60 seconds ago
-  LowerBound = system_time() - SCAN_PERIOD.
+  LowerBound = os:system_time() - ?SCAN_PERIOD,
 
-  FilteredState = lists:filter(fun ({_, Timestamp}) -> Timestamp > LowerBound end, State).
-  SumResult = lists:foldl(fun (V, Acc) -> V + Acc end, 0, FilteredState).
-  CountResult = length(FilteredState).
+  TimestampFilter = fun ({_, Timestamp}) -> Timestamp > LowerBound end,
+  SumFold = (fun ({V, _}, Acc) -> V + Acc end),
 
-  Result = SumResult/CountResult.
+  FilteredState = lists:filter(TimestampFilter, State),
+  SumResult = lists:foldl(SumFold, 0, FilteredState),
+  CountResult = length(FilteredState),
+
+  Result = SumResult/CountResult,
 
   {reply, Result, State}.
 

@@ -19,9 +19,9 @@ average(MetricName) ->
 get_metric_pid(MetricName) ->
   case metric_sup:start_child(MetricName) of
     {ok, Pid} ->
-      Pid
+      Pid;
     {already_present, Pid} ->
-      Pid
+      Pid;
     Term ->
       Term
-  end
+  end.

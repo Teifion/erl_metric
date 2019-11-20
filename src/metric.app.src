@@ -1,11 +1,11 @@
-{application, metric_application, [
-    {description, ""},
-    {vsn, "1.0.0"},
-    {registered, [ ]},
+{application, metric, [
+    {description, "Metric application"},
+    {vsn, git},
+    {registered, []},
     {applications, [
         kernel,
-        stdlib,
+        stdlib
     ]},
     {env, [ ]},
-    {mod, {metric_application, []}}
+    {mod, {metric, []}}
 ]}.

@@ -1,0 +1,27 @@
+= Metric server
+
+Develop an Erlang application which collects numeric metrics from different components of
+some abstract system. The only result of this collection should be the value of moving
+average among submitted metric samples for some time interval of fixed size.
+
+The application should support simultaneous calculation of up to 10k of metrics and the
+average value for a metric should be returned for the interval of the last minute (60k
+ms). The intended interface should be compatible with the following specification: 
+
+```erlang
+harvester:report(MetricName :: binary(), MetricValue :: float()).
+harvester:average(MetricName :: binary()) -> float().
+```
+
+For simplicity the amount of samples submitted for all metrics during 1 minute interval
+can be assumed to be small enough to fit into memory.
+
+The expected result should be the source code of an application which can be compiled with
+Erlang 20 and run with an `application:start/1` call. 
+
+Use a process for each metric. 
+
+Use a process to keep track of the mapping between metric names and their processes.
+
+Get the timestamp for the sample very early and pass it on. This way you can more easily
+test the internal componets by providing timestamps of your own choosing.

@@ -2,3 +2,4 @@
 *.beam
 .eunit
 .rebar
+_build

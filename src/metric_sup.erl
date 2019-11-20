@@ -14,8 +14,7 @@ start_link() ->
 % to hold the ID of the child being started
 start_child(MetricName) ->
   % http://erlang.org/doc/man/supervisor.html#SupRef
-  % consider implementing a case clause based on the return value
-  supervisor:start_child(metric_sup, [metric_server]).
+  supervisor:start_child(metric_sup, [{local, MetricName}]).
   
 % Get these working for tomorrow
 % rebar test

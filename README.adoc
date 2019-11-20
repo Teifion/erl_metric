@@ -21,7 +21,7 @@ Erlang 20 and run with an `application:start/1` call.
 
 Use a process for each metric. 
 
-Use a process to keep track of the mapping between metric names and their processes.
+~Use a process to keep track of the mapping between metric names and their processes.~
 
 Get the timestamp for the sample very early and pass it on. This way you can more easily
 test the internal componets by providing timestamps of your own choosing.

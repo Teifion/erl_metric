@@ -27,13 +27,3 @@ basic_test () ->
   _ = average(metric3),
 
   ok.
-
-error_test () ->
-  % We expect it will break with certain values, we want to ensure it breaks the way expected
-  ok = try
-      report(metric4, "A")
-  catch
-    % JAKUB
-    % Not certain what error we'll get here as I'm not familair with the error codes in Erlang
-    error:
-  end

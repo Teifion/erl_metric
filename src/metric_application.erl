@@ -1,6 +1,5 @@
 -module(metric_application).
 -behaviour(application).
--import (metric_sup, [start_link/0]).
 
 -export([start/2]).
 -export([stop/1]).

@@ -13,8 +13,14 @@ start_link() ->
 % the implication at one stage is the 2nd argument would do it but that is elsewhere shown
 % to hold the ID of the child being started
 start_child(MetricName) ->
+  % http://erlang.org/doc/man/supervisor.html#SupRef
+  % consider implementing a case clause based on the return value
   supervisor:start_child(metric_sup, [metric_server]).
-
+  
+% Get these working for tomorrow
+% rebar compile
+% rebar test
+% rebar eunit
 
 init(_) ->
     SupFlags = #{
@@ -22,7 +28,10 @@ init(_) ->
       intensity => 0,
       period => 1
     },
+    % TODO find a param in the child spec which will dictate the lifecycle/duration of the 
+    % child so we can say they last indefinately (keywords: transient, permenant, temporary)
+    % may also have to specify worker vs supervisor
     ChildSpecs = [#{id => metric_server,
-                    start => {metric_server, sthtart_link, []},
+                    start => {metric_server, start_link, []},
                     shutdown => brutal_kill}],
     {ok, SupFlags, ChildSpecs}.

@@ -1,7 +1,7 @@
 -module(metric_server).
 -behaviour(gen_server).
 
--export ([average/1, report/2, handle_call/3, handle_cast/2, init/1, start_link/0]).
+-export ([average/1, report/2, handle_call/3, handle_cast/2, init/1, start_link/1]).
 
 -ifdef(TEST).
 -compile([export_all]).
@@ -10,27 +10,28 @@
 % Store stuff for 60 seconds as per the requirements
 -define(SCAN_PERIOD, 60 * 1000).
 
-init(Args) ->
-  {ok, Args}.
+init(_) ->
+  {ok, []}.
 
-start_link() ->
-  gen_server:start_link(?MODULE, [], []).
+start_link(MetricName) ->
+  gen_server:start_link({local, MetricName}, ?MODULE, [], []).
 
 report (Pid, Value) ->
-  get_server:cast(Pid, {report, Value}, get_timestamp()).
+  Timestamp = os:system_time(),
+  gen_server:cast(Pid, {report, {Value, Timestamp}}).
 
 average (Pid) ->
   gen_server:call(Pid, {average, nil}).
-
 
 get_timestamp() ->
   os:timestamp().
 
 % Callbacks
-handle_call({average, _}, _, State) ->
+handle_call({average, _}, _From, State) ->
   {reply, get_average(State), State}.
 
-handle_cast({report, {Value, Timestamp}}, State) ->
+handle_cast({report, Value, Timestamp}, State) ->
+  io:write("CAST"),
   {noreply, [{Value, Timestamp} | State]}.
 
 get_average(ValueList) ->

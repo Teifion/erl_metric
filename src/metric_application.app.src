@@ -1,4 +1,4 @@
-{application, metric, [
+{application, metric_application, [
     {description, "Metric application"},
     {vsn, git},
     {registered, []},
@@ -7,5 +7,5 @@
         stdlib
     ]},
     {env, [ ]},
-    {mod, {metric, []}}
+    {mod, {metric_application, []}}
 ]}.

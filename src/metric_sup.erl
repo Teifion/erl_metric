@@ -18,7 +18,6 @@ start_child(MetricName) ->
   supervisor:start_child(metric_sup, [metric_server]).
   
 % Get these working for tomorrow
-% rebar compile
 % rebar test
 % rebar eunit
 

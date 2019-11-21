@@ -9,13 +9,18 @@
 all() -> [test1].
 
 test1(_Config) ->
-  metric_sup:start_link(),
+  application:start(metric_application),
 
-  metric_api:report(metric1, 10),
-  metric_api:report(metric1, 20),
-  metric_api:report(metric1, 90),
-  metric_api:report(metric2, 1000),
+  M1 = metric_api:report(metric1, 10),
+  ?assert(M1 == ok),
+  M2 = metric_api:report(metric1, 20),
+  ?assert(M2 == ok),
+  M3 = metric_api:report(metric1, 90),
+  ?assert(M3 == ok),
+  M4 = metric_api:report(metric2, 1000),
+  ?assert(M4 == ok),
 
-  metric_api:average(metric1),
+  Metric1Result = metric_api:average(metric1),
+  ?assert(Metric1Result == 40),
 
   ok.

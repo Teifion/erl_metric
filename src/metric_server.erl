@@ -30,8 +30,7 @@ get_timestamp() ->
 handle_call({average, _}, _From, State) ->
   {reply, get_average(State), State}.
 
-handle_cast({report, Value, Timestamp}, State) ->
-  io:write("CAST"),
+handle_cast({report, {Value, Timestamp}}, State) ->
   {noreply, [{Value, Timestamp} | State]}.
 
 get_average(ValueList) ->

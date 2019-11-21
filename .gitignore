@@ -3,3 +3,4 @@
 .eunit
 .rebar
 _build
+.idea
